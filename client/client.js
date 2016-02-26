@@ -1,29 +1,24 @@
 
-Meteor.startup(function () {
-	Meteor.subscribe("Memes");
+Meteor.subscribe("Memes");
 
-	
-	
 
-	Deps.autorun(function () {
-		myMeme = Memes.findOne();
-		try {
-			console.log(myMeme.link);
-		  	Template.memes.helpers({
-				swag: function() {
-					return myMeme.link;
-    			}
-			});
-			
-		} catch (e) {
-			Template.memes.helpers({
-				swag: function() {
-					return "yolo";
-    			}
-			});
-		  	console.log(Template.memes);
+function getRandomArbitrary(min, max) {
+    return Math.ceil(Math.random() * (max - min) + min);
+}
+
+Template.memes.helpers({
+	swag: function() {
+		try{
+			count = Memes.find().count();
+			rand = getRandomArbitrary(1,count);
+			myMeme = Memes.find().fetch()[rand];
+			console.log(rand);
+			return myMeme.link;
 		}
-  		
-	});
-	
+        catch (e){
+        	console.log(e);
+        	return "yolo.png"
+        }
+        
+    }
 });
